@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title">
+<title id="title">Original illustrated placeholder of the Taj Mahal</title>
+<rect width="1200" height="800" fill="#d7c8b5"/>
+<rect y="505" width="1200" height="295" fill="#b1a590"/>
+<path d="M0 490Q220 455 420 486T800 475T1200 485V560H0Z" fill="#777f6c"/>
+<path d="M85 516V210m34 306V235m995 281V210m-34 306V235" stroke="#f0e9d8" stroke-width="25"/>
+<path d="M74 223h55m940 0h55" stroke="#ddd1bd" stroke-width="28"/>
+<rect x="330" y="333" width="540" height="205" fill="#eee7d8"/>
+<path d="M455 330Q465 242 600 211Q735 242 745 330Z" fill="#f6eee0"/>
+<path d="M590 211v-50m-36 50h92" stroke="#f5ecd9" stroke-width="12"/>
+<path d="M544 538V410a56 56 0 0 1 112 0v128" fill="#6e7066"/>
+<path d="M380 538V415a32 32 0 0 1 64 0v123m312 0V415a32 32 0 0 1 64 0v123" fill="#b7b6a8"/>
+<path d="M0 574h1200v226H0Z" fill="#d5c9ad"/>
+<path d="M443 574h314l100 226H343Z" fill="#91aaa4"/>
+<path d="M585 574h30v226h-30Z" fill="#dce0cf" opacity=".7"/>
+<path d="M0 758h1200" stroke="#a8967e" stroke-width="16"/>
+</svg>

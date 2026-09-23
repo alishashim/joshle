@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 164" role="img" aria-labelledby="title">
+  <title id="title">Josh, a small traveler in a red coat</title>
+  <!-- Original Joshle mascot: simple shapes, created for this project. -->
+  <ellipse cx="59" cy="156" rx="39" ry="6" fill="#202922" opacity=".22"/>
+  <path d="M40 117 37 151h17l8-31M72 119l9 32h17l-9-41" fill="#263c38" stroke="#202922" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M21 71q-11 11-11 35l20 9 9-18M99 71q11 11 11 35l-20 9-9-18" fill="#d86a48" stroke="#202922" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M27 73q-3 15 3 37 5 22 30 22t30-22q6-22 3-37L71 62H49Z" fill="#cf5238" stroke="#202922" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M49 63 60 82l11-19" fill="none" stroke="#f4d7af" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M52 119h16" stroke="#a63a2c" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="60" cy="39" rx="28" ry="31" fill="#e9b887" stroke="#202922" stroke-width="4"/>
+  <path d="M32 39q-2-34 28-34 30 0 28 34Q80 22 61 22 42 22 32 39Z" fill="#263c38" stroke="#202922" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="50" cy="43" r="2.6" fill="#202922"/>
+  <circle cx="70" cy="43" r="2.6" fill="#202922"/>
+  <path d="M54 56q6 5 12 0" fill="none" stroke="#763f32" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M43 73q-6 15-4 32M77 73q6 15 4 32" fill="none" stroke="#eb8a67" stroke-width="2" opacity=".75"/>
+</svg>

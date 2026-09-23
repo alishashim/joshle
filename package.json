@@ -1,0 +1,33 @@
+{
+  "name": "joshle",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "validate-content": "node scripts/validate-content.mjs",
+    "generate-puzzles": "node --import tsx scripts/generate-puzzles.ts",
+    "build": "npm run validate-content && tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "maplibre-gl": "^6.11.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@google/genai": "^2.24.0",
+    "@types/node": "^26.6.2",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "dotenv": "^18.0.3",
+    "sharp": "^0.35.4",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.2",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.7"
+  }
+}

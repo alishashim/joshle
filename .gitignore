@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.vercel/
+scripts/.generate-puzzles.lock
+.DS_Store
+.env
+.env.local
+.env.*
+!.env.example
+213F7A9E-21AE-4AE2-AE1A-DA444945E17F.heic
+josh-cutout.png

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title">
+<title id="title">Original illustrated placeholder of the Eiffel Tower</title>
+<rect width="1200" height="800" fill="#b9c8c3"/>
+<circle cx="970" cy="142" r="68" fill="#e9d5aa"/>
+<path d="M0 490h1200v310H0Z" fill="#9ca99a"/>
+<path d="M0 548h150v-85h80v85h42v-120h120v120h420v-100h120v100h44v-75h110v75h114v252H0Z" fill="#747e75"/>
+<path d="M524 556 597 126h8l73 430m-177 0h199M541 421h118m-101-99h84m-65-104h46" fill="none" stroke="#493f3a" stroke-width="20" stroke-linejoin="round"/>
+<path d="m537 420 124 136m-122 0 122-136m-103-98 86 99m-87 0 85-99" fill="none" stroke="#493f3a" stroke-width="10"/>
+<path d="M552 558q48-120 96 0" fill="none" stroke="#493f3a" stroke-width="17"/>
+<path d="M0 620q260-38 470 0t730 0v180H0Z" fill="#7caaa9"/>
+<path d="M0 685q220 30 440 0t430-2 330 18" fill="none" stroke="#c6d5c8" stroke-width="14" opacity=".65"/>
+<path d="M0 598q260-21 480 0t720 0" fill="none" stroke="#475a53" stroke-width="25"/>
+</svg>
