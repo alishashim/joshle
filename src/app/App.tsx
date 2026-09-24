@@ -58,7 +58,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
   const puzzle: Puzzle = day.rounds[roundIndex];
   const completion = save.completed[puzzle.id] ?? null;
   const [guess, setGuess] = useState<Coordinates | null>(completion?.guess ?? null);
-  const [copyStatus, setCopyStatus] = useState('');
+  const [shareStatus, setShareStatus] = useState('');
   const handleGuess = useCallback((nextGuess: Coordinates | null) => setGuess(nextGuess), []);
   const streak = activeStreak(save, today);
   const scores = day.mode === 'triple' ? dailyScores(day, save) : null;
@@ -68,7 +68,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
     window.scrollTo(0, 0);
     setRoundIndex(roundIndex + 1);
     setGuess(null);
-    setCopyStatus('');
+    setShareStatus('');
   } : undefined;
 
   const submitGuess = () => {
@@ -93,16 +93,26 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
     return () => window.removeEventListener('keydown', dismissOnEscape);
   }, [save, completion]);
 
-  const copyResult = async () => {
+  const shareGameResult = async () => {
     if (!completion) return;
     const text = day.mode === 'triple' && scores
       ? shareTripleResult(day.number, scores, streak)
       : shareResult(puzzle.number, completion.score, completion.distanceKm, streak);
+    setShareStatus('');
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share({ title: 'Joshle', text });
+        setShareStatus('Shared');
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+      }
+    }
     try {
       await navigator.clipboard.writeText(text);
-      setCopyStatus('Copied to clipboard');
+      setShareStatus('Copied to clipboard');
     } catch {
-      setCopyStatus('Copy unavailable in this browser');
+      setShareStatus('Sharing unavailable in this browser');
     }
   };
 
@@ -150,7 +160,8 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
 
         {completion ? (
           <ResultSheet puzzle={puzzle} distance={completion.distanceKm} score={completion.score}
-            streak={streak} onCopy={copyResult} copyStatus={copyStatus}
+            streak={streak} onShare={shareGameResult} shareStatus={shareStatus}
+            nativeShareAvailable={typeof navigator.share === 'function'}
             dailyScores={finalRound ? scores : null}
             nextRound={nextRound}
             nextLabel={!finalRound ? `Continue to round ${roundIndex + 2}` : undefined} />

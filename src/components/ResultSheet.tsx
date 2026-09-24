@@ -8,13 +8,14 @@ const licenses = {
   GENERATED: 'AI-generated',
 } as const;
 
-export function ResultSheet({ puzzle, distance, score, streak, onCopy, copyStatus, dailyScores, nextRound, nextLabel }: {
+export function ResultSheet({ puzzle, distance, score, streak, onShare, shareStatus, nativeShareAvailable, dailyScores, nextRound, nextLabel }: {
   puzzle: Puzzle;
   distance: number;
   score: number;
   streak: number;
-  onCopy: () => void;
-  copyStatus: string;
+  onShare: () => void;
+  shareStatus: string;
+  nativeShareAvailable: boolean;
   dailyScores?: number[] | null;
   nextRound?: () => void;
   nextLabel?: string;
@@ -42,8 +43,8 @@ export function ResultSheet({ puzzle, distance, score, streak, onCopy, copyStatu
         <div className="share-row">
           {nextRound
             ? <button type="button" className="share-button" onClick={nextRound}>{nextLabel}</button>
-            : <><button type="button" className="share-button" onClick={onCopy}>{copyStatus === 'Copied to clipboard' ? 'Copied' : 'Copy result'}</button>
-              <span role="status" aria-live="polite">{copyStatus}</span></>}
+            : <><button type="button" className="share-button" onClick={onShare}>{shareStatus === 'Copied to clipboard' ? 'Copied' : nativeShareAvailable ? 'Share result' : 'Copy result'}</button>
+              <span role="status" aria-live="polite">{shareStatus}</span></>}
         </div>
       </div>
     </section>
