@@ -103,7 +103,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
       <section className="clue-pane" aria-labelledby="game-title">
         <header className="brand-row">
           <span className="wordmark">joshle<span className="wordmark-dot">.</span></span>
-          <span className="phase-tag">PHOTO JOSH / #{day.number}{day.mode === 'triple' ? ` · ${roundIndex + 1}/3 ${day.rounds[roundIndex].difficulty?.toUpperCase() ?? ''}` : ''}</span>
+          <span className="phase-tag">PHOTO JOSH / #{day.number}{day.mode === 'triple' ? ` · ${roundIndex + 1}/3` : ''}</span>
         </header>
 
         <div className="clue-content">
@@ -149,7 +149,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
               setGuess(null);
               setCopyStatus('');
             } : undefined}
-            nextLabel={!finalRound ? `Continue to ${day.rounds[roundIndex + 1].difficulty}` : undefined} />
+            nextLabel={!finalRound ? `Continue to round ${roundIndex + 2}` : undefined} />
         ) : (
           <div className="action-bar">
             <div className="guess-readout" aria-live="polite">

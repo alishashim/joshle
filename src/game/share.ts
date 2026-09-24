@@ -13,9 +13,9 @@ export function shareTripleResult(number: number, scores: readonly number[], str
   const total = scores.reduce((sum, score) => sum + score, 0);
   return [
     `JOSHLE #${number} 🌍`,
-    `Easy ${scores[0].toLocaleString('en-US')} / 5,000`,
-    `Medium ${scores[1].toLocaleString('en-US')} / 5,000`,
-    `Hard ${scores[2].toLocaleString('en-US')} / 5,000`,
+    `Round 1 ${scores[0].toLocaleString('en-US')} / 5,000`,
+    `Round 2 ${scores[1].toLocaleString('en-US')} / 5,000`,
+    `Round 3 ${scores[2].toLocaleString('en-US')} / 5,000`,
     `TOTAL ${total.toLocaleString('en-US')} / 15,000`,
     `🔥 ${streak}`,
     'joshle.alishashim.com',

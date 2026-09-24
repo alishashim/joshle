@@ -38,7 +38,7 @@ export function ResultSheet({ puzzle, distance, score, streak, onCopy, copyStatu
           {puzzle.image.licenseUrl ? <> · <a href={puzzle.image.licenseUrl} target="_blank" rel="noreferrer">{licenses[puzzle.image.license]}</a></> : ` · ${licenses[puzzle.image.license]}`}
         </p>
         {puzzle.generation && <p className="photo-credit">Location data: <a href={puzzle.generation.coordinateSourceUrl} target="_blank" rel="noreferrer">GeoNames</a> · CC BY 4.0</p>}
-        {dailyScores && <p className="daily-breakdown">Easy {dailyScores[0].toLocaleString()} · Medium {dailyScores[1].toLocaleString()} · Hard {dailyScores[2].toLocaleString()}</p>}
+        {dailyScores && <p className="daily-breakdown">Round 1 {dailyScores[0].toLocaleString()} · Round 2 {dailyScores[1].toLocaleString()} · Round 3 {dailyScores[2].toLocaleString()}</p>}
         <div className="share-row">
           {nextRound
             ? <button type="button" className="share-button" onClick={nextRound}>{nextLabel}</button>
