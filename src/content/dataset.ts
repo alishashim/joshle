@@ -13,8 +13,8 @@ export type DailyContent = {
 };
 
 export function resolveDataset(value: string | undefined): Dataset {
-  if (!value || value === 'legacy') return 'legacy';
-  if (value === 'triple') return 'triple';
+  if (!value || value === 'triple') return 'triple';
+  if (value === 'legacy') return 'legacy';
   throw new Error(`Invalid VITE_JOSHLE_DATASET: ${value}`);
 }
 

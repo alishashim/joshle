@@ -8,8 +8,8 @@ import { resolveDataset, selectDay } from './dataset';
 describe('content dataset switch', () => {
   const tripleDay = planDay([], catalog as Location[]);
 
-  it('defaults to legacy and rejects invalid modes', () => {
-    expect(resolveDataset(undefined)).toBe('legacy');
+  it('defaults to triple and rejects invalid modes', () => {
+    expect(resolveDataset(undefined)).toBe('triple');
     expect(resolveDataset('legacy')).toBe('legacy');
     expect(resolveDataset('triple')).toBe('triple');
     expect(() => resolveDataset('unknown')).toThrow();

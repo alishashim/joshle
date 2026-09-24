@@ -25,7 +25,7 @@ The globe uses MapLibre GL JS and OpenFreeMap. Map tiles require a network conne
 
 ## Deploy to Vercel
 
-Import this repository as a Vite project. Use `npm run build` as the build command and `dist` as the output directory if Vercel does not detect them automatically. The default dataset is `legacy`; no production environment variables, functions, or Gemini access are needed. To deploy the three-round game, set `VITE_JOSHLE_DATASET=triple` in Vercel and redeploy. To revert immediately, set it to `legacy` (or remove it) and redeploy. Add `joshle.alishashim.com` as the project domain and point its DNS to Vercel using the records shown in your Vercel project. Keep the root site separate. The canonical URL and social image in `index.html` already use the production hostname. See Vercel's [build settings](https://vercel.com/docs/builds/configure-a-build) for current dashboard details.
+Import this repository as a Vite project. Use `npm run build` as the build command and `dist` as the output directory if Vercel does not detect them automatically. The default dataset is the three-round game; no production environment variables, functions, or Gemini access are needed. To revert to the original single-guess game, set `VITE_JOSHLE_DATASET=legacy` in Vercel and redeploy. Remove that variable (or set it to `triple`) to use the three-round game. Add `joshle.alishashim.com` as the project domain and point its DNS to Vercel using the records shown in your Vercel project. Keep the root site separate. The canonical URL and social image in `index.html` already use the production hostname. See Vercel's [build settings](https://vercel.com/docs/builds/configure-a-build) for current dashboard details.
 
 ## Deploy to Cloudflare Pages
 
