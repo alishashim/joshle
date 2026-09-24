@@ -1,0 +1,30 @@
+{
+  "records": [
+    {
+      "id": "joshle-0011",
+      "number": 11,
+      "date": "2026-10-03",
+      "image": {
+        "src": "/images/puzzles/p_0011.webp",
+        "alt": "Josh pointing in a casual travel scene with architecture and landscape clues.",
+        "author": "Joshle with Google Gemini",
+        "license": "GENERATED",
+        "attributionText": "AI-generated for Joshle with Google Gemini",
+        "includesJosh": true
+      },
+      "answer": {
+        "lat": 40.71427,
+        "lng": -74.00597,
+        "label": "New York City, United States",
+        "countryCode": "US"
+      },
+      "fact": "New York City is in United States. The clue is a generated, representative scene rather than a photo of the exact coordinate.",
+      "generation": {
+        "geonameId": 5128581,
+        "coordinateSourceUrl": "https://www.geonames.org/5128581/",
+        "difficulty": "easy",
+        "sizeTier": "very-large"
+      }
+    }
+  ]
+}

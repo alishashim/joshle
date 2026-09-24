@@ -1,5 +1,3 @@
-import type { Puzzle } from '../content/types';
-
 export const GAME_TIME_ZONE = 'America/New_York';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -18,7 +16,7 @@ export function previousDate(date: string): string {
   return day.toISOString().slice(0, 10);
 }
 
-export function selectDailyPuzzle(date: string, entries: readonly Puzzle[]): { puzzle: Puzzle; missingToday: boolean } {
+export function selectDailyPuzzle<T extends { date: string }>(date: string, entries: readonly T[]): { puzzle: T; missingToday: boolean } {
   if (!entries.length) throw new Error('No puzzles are available.');
   const exact = entries.find((puzzle) => puzzle.date === date);
   const earlier = entries.filter((puzzle) => puzzle.date <= date).sort((a, b) => b.date.localeCompare(a.date))[0];

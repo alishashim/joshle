@@ -2,6 +2,7 @@ import type { Coordinates } from '../app/gameState';
 import { previousDate } from '../game/dailyPuzzle';
 
 export const STORAGE_KEY = 'joshle.game.official';
+export const TRIPLE_STORAGE_KEY = 'joshle.game.triple';
 export const STORAGE_VERSION = 1;
 
 export type Completion = {
@@ -79,13 +80,13 @@ function validCount(value: unknown): number {
   return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0 ? value : 0;
 }
 
-export function readSave(): GameSave {
-  try { return parseSave(window.localStorage.getItem(STORAGE_KEY)); }
+export function readSave(key = STORAGE_KEY): GameSave {
+  try { return parseSave(window.localStorage.getItem(key)); }
   catch { return emptySave(); }
 }
 
-export function writeSave(save: GameSave): void {
-  try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(save)); }
+export function writeSave(save: GameSave, key = STORAGE_KEY): void {
+  try { window.localStorage.setItem(key, JSON.stringify(save)); }
   catch { /* Private browsing or blocked storage: gameplay remains usable this session. */ }
 }
 

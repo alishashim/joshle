@@ -25,7 +25,7 @@ The globe uses MapLibre GL JS and OpenFreeMap. Map tiles require a network conne
 
 ## Deploy to Vercel
 
-Import this repository as a Vite project. Use `npm run build` as the build command and `dist` as the output directory if Vercel does not detect them automatically. No production environment variables, functions, or Gemini access are needed. Add `joshle.alishashim.com` as the project domain and point its DNS to Vercel using the records shown in your Vercel project. Keep the root site separate. The canonical URL and social image in `index.html` already use the production hostname. See Vercel's [build settings](https://vercel.com/docs/builds/configure-a-build) for current dashboard details.
+Import this repository as a Vite project. Use `npm run build` as the build command and `dist` as the output directory if Vercel does not detect them automatically. The default dataset is `legacy`; no production environment variables, functions, or Gemini access are needed. To deploy the three-round game, set `VITE_JOSHLE_DATASET=triple` in Vercel and redeploy. To revert immediately, set it to `legacy` (or remove it) and redeploy. Add `joshle.alishashim.com` as the project domain and point its DNS to Vercel using the records shown in your Vercel project. Keep the root site separate. The canonical URL and social image in `index.html` already use the production hostname. See Vercel's [build settings](https://vercel.com/docs/builds/configure-a-build) for current dashboard details.
 
 ## Deploy to Cloudflare Pages
 
@@ -40,13 +40,31 @@ Before public launch, review the dated clues for visual quality and geographic a
 
 ## Daily content
 
-Puzzles live in `src/content/puzzles.ts`. Each record has a permanent `id` and `number`, a date in the `America/New_York` game timezone, an answer, a fact, and local image metadata. The first ten daily clues are manually generated images for September 23–October 2, 2026, with representative city-center coordinates from GeoNames. Their city-named source JPEGs are retained, while the game serves smaller, opaque-named WebP copies. The earlier illustrated test assets remain in the folder but are not daily puzzles.
+Legacy puzzles live in `src/content/puzzles.ts`. Each record has a permanent `id` and `number`, a date in the `America/New_York` game timezone, an answer, a fact, and local image metadata. The first ten daily clues are manually generated images for September 23–October 2, 2026; puzzle #11 follows on October 3. Their city-named source JPEGs are retained, while the game serves smaller, opaque-named WebP copies. The earlier illustrated test assets remain in the folder but are not daily puzzles.
 
-`npm run validate-content` checks dates, IDs, numbers, answer coordinates, local image files, and required license credits. It also runs during `npm run build`. If today's record is absent, the game shows the latest authored puzzle; development builds also show a content warning. Publish new dated records to keep the daily game fresh.
+The three-round dataset lives in `src/content/tripleDays.ts`. Each complete day contains Easy, Medium, and Hard rounds worth 5,000 points each. Its first three days reuse nine existing WebP clues without altering the legacy records; the fourth day has three newly generated images. The two modes have separate save keys (`joshle.game.official` and `joshle.game.triple`) and can have different content on the same date. Local mode checks:
+
+```sh
+VITE_JOSHLE_DATASET=legacy npm run dev
+VITE_JOSHLE_DATASET=triple npm run dev
+VITE_JOSHLE_DATASET=triple npm run build
+```
+
+`npm run validate-content` checks both manifests, including triple-day round order, assets, and credits. It also runs during `npm run build`. If today's record is absent, the selected mode shows its latest authored day; development builds also show a content warning. Publish new dated records to keep the daily game fresh.
 
 ### Developer-only Gemini puzzle generation
 
 The generator reads `GEMINI_API_KEY` from the shell or ignored `.env.local`. The key and Google SDK are used only by the local Node script; the static site makes no Gemini calls. [Gemini 3.1 Flash Image has no free API tier](https://ai.google.dev/gemini-api/docs/pricing), so generating assets requires a key linked to a billed project. The live site's runtime cost remains independent of Gemini.
+
+For the three-round dataset, `--count 1` generates exactly one complete day (three image requests), while `--count 5` generates five days. Dry-run plans dates and locations without API calls. The maximum batch is 30 days. An incomplete day stays in ignored `scripts/.generated-days/` and resumes on the next run; it enters `tripleDays.ts` only after all three WebPs are valid. `--force` regenerates staged images for an unpublished day. Review every generated day before deploying.
+
+```sh
+npm run generate-days -- --count 1 --dry-run
+npm run generate-days -- --count 1
+npm run generate-days -- --count 5
+```
+
+The original single-puzzle generator remains available for the legacy dataset:
 
 ```sh
 npm run generate-puzzles -- --count 1 --dry-run
@@ -61,7 +79,7 @@ The 120-place catalog in `scripts/location-catalog.json` spans six continents an
 
 Both root reference images are sent to Gemini for every puzzle: `josh.jpg` guides the pointing pose and composition, and `josh-cutout.jpg` guides Josh's face, hair, and appearance. They stay in place. The generated image already contains Josh, so the app omits its SVG overlay for those puzzles. The prompt makes him roughly 2–3 times heavier and larger-bodied than the reference. `generation.difficulty` records `easy`, `medium`, or `hard`; `generation.sizeTier` uses `very-large` for easy and medium and `enormous` for hard. The generated WebP and metadata are committed as static content, never requested from Gemini by players.
 
-Saves use a versioned localStorage entry (`joshle.game.official`). The earlier `joshle.game` test save remains untouched and is not used for the official puzzle run. Clearing browser storage resets local progress. `.env.local` is ignored by Git and is not needed to play or build Joshle; the app makes no runtime AI calls.
+Saves use versioned localStorage entries. The earlier `joshle.game` test save remains untouched. Clearing browser storage resets local progress. `.env.local` is ignored by Git and is not needed to play or build Joshle; the app makes no runtime AI calls.
 
 ## Project notes
 

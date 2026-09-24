@@ -7,8 +7,9 @@
     "dev": "vite",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "validate-content": "node scripts/validate-content.mjs",
+    "validate-content": "node scripts/validate-content.mjs && node scripts/validate-triple-content.mjs",
     "generate-puzzles": "node --import tsx scripts/generate-puzzles.ts",
+    "generate-days": "node --import tsx scripts/generate-days.ts",
     "build": "npm run validate-content && tsc --noEmit && vite build",
     "preview": "vite preview"
   },

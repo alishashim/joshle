@@ -119,6 +119,9 @@ h1 { max-width: 12ch; margin: 0 0 26px; font-size: clamp(36px, 3.4vw, 58px); lin
 .result-fact { margin: 0 0 9px; font-size: 13px; line-height: 1.4; }
 .photo-credit { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.4; }
 .photo-credit a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.daily-breakdown { margin: 10px 0 0; font-size: 12px; font-weight: 650; line-height: 1.4; }
+.content-unavailable { max-width: 38rem; margin: 15vh auto; padding: 24px; }
+.content-unavailable h1 { max-width: none; font-size: 32px; }
 .share-row { display: flex; align-items: center; gap: 12px; margin-top: 13px; color: var(--muted); font-size: 11px; }
 .share-button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--ink); border-radius: 3px; color: var(--ink); background: transparent; font-size: 12px; font-weight: 700; cursor: pointer; }
 .share-button:hover { background: #e7e4da; }

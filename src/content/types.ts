@@ -34,3 +34,12 @@ export type Puzzle = {
     sizeTier: 'very-large' | 'enormous';
   };
 };
+
+export type Difficulty = 'easy' | 'medium' | 'hard';
+export type RoundPuzzle = Puzzle & { difficulty: Difficulty; maxScore: 5000 };
+export type TripleDay = {
+  id: string;
+  number: number;
+  date: string;
+  rounds: [RoundPuzzle, RoundPuzzle, RoundPuzzle];
+};

@@ -17,5 +17,5 @@
     "noFallthroughCasesInSwitch": true,
     "types": ["node", "vite/client"]
   },
-  "include": ["src", "scripts/generate-puzzles.ts", "vite.config.ts"]
+  "include": ["src", "scripts/*.ts", "vite.config.ts"]
 }
