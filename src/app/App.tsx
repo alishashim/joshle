@@ -102,12 +102,11 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
     <main className={`game-shell${completion ? ' has-result' : ''}`}>
       <section className="clue-pane" aria-labelledby="game-title">
         <header className="brand-row">
-          <span className="wordmark">joshle<span className="wordmark-dot">.</span></span>
-          <span className="phase-tag">PHOTO JOSH / #{day.number}{day.mode === 'triple' ? ` · ${roundIndex + 1}/3` : ''}</span>
+          <span className="wordmark">joshle</span>
+          <span className="phase-tag"><span className="phase-prefix">PHOTO JOSH / </span>#{day.number}{day.mode === 'triple' ? ` · ${roundIndex + 1}/3` : ''}</span>
         </header>
 
         <div className="clue-content">
-          <p className="eyebrow">One photo. One place.</p>
           <h1 id="game-title">Where in the world is Josh?</h1>
           <PhotoClue key={puzzle.id} puzzle={puzzle} />
           <p className="clue-note">Look for a place in the picture, then drop a pin on the globe.</p>
@@ -117,6 +116,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
           <span>Daily puzzle · resets at midnight New York time</span>
           <strong>{streak} day streak · best {save.bestStreak}</strong>
           {import.meta.env.DEV && missingToday && <span className="content-warning">No puzzle for {today}; showing {puzzle.date}.</span>}
+          {puzzle.image.license === 'GENERATED' && <span className="generated-note">AI-generated image</span>}
         </footer>
       </section>
 

@@ -42,7 +42,7 @@ Before public launch, review the dated clues for visual quality and geographic a
 
 Legacy puzzles live in `src/content/puzzles.ts`. Each record has a permanent `id` and `number`, a date in the `America/New_York` game timezone, an answer, a fact, and local image metadata. The first ten daily clues are manually generated images for September 23–October 2, 2026; puzzle #11 follows on October 3. Their city-named source JPEGs are retained, while the game serves smaller, opaque-named WebP copies. The earlier illustrated test assets remain in the folder but are not daily puzzles.
 
-The three-round dataset lives in `src/content/tripleDays.ts`. Each complete day contains Easy, Medium, and Hard rounds worth 5,000 points each. Its first three days reuse nine existing WebP clues without altering the legacy records; the fourth day has three newly generated images. The two modes have separate save keys (`joshle.game.official` and `joshle.game.triple`) and can have different content on the same date. Local mode checks:
+The three-round dataset lives in `src/content/tripleDays.ts`. Each complete day contains Easy, Medium, and Hard rounds worth 5,000 points each. Day 1 uses three newly generated clues. Days 2–3 reuse six existing WebP clues without altering the legacy records; day 4 has three newly generated images. The two modes have separate save keys (`joshle.game.official` and `joshle.game.triple.v2`) and can have different content on the same date. The triple key was changed when Day 1 was reset so earlier test completions do not hide its new rounds. Local mode checks:
 
 ```sh
 VITE_JOSHLE_DATASET=legacy npm run dev

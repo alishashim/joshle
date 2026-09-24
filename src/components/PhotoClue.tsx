@@ -26,7 +26,6 @@ export function PhotoClue({ puzzle }: { puzzle: Puzzle }) {
         </span>}
       </div>
       {puzzle.image.isPlaceholder && <figcaption>Illustrated sample clue · photo to be curated</figcaption>}
-      {puzzle.image.license === 'GENERATED' && <figcaption>AI-generated travel scene</figcaption>}
     </figure>
   );
 }

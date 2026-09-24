@@ -2,7 +2,7 @@ import type { Coordinates } from '../app/gameState';
 import { previousDate } from '../game/dailyPuzzle';
 
 export const STORAGE_KEY = 'joshle.game.official';
-export const TRIPLE_STORAGE_KEY = 'joshle.game.triple';
+export const TRIPLE_STORAGE_KEY = 'joshle.game.triple.v2';
 export const STORAGE_VERSION = 1;
 
 export type Completion = {

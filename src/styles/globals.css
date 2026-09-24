@@ -44,7 +44,6 @@ button:focus-visible, .maplibregl-canvas:focus-visible { outline: 3px solid var(
 }
 
 .wordmark { font-size: 23px; font-weight: 800; letter-spacing: -.075em; line-height: 1; }
-.wordmark-dot { color: var(--accent); }
 .phase-tag, .eyebrow, .readout-label, .step-number {
   font-size: 10px;
   font-weight: 750;
@@ -67,6 +66,7 @@ h1 { max-width: 12ch; margin: 0 0 26px; font-size: clamp(36px, 3.4vw, 58px); lin
 .clue-note { max-width: 27ch; margin: 19px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
 .clue-footer { display: flex; flex-direction: column; gap: 4px; color: var(--muted); font-size: 11px; line-height: 1.4; }
 .clue-footer strong { color: var(--ink); font-weight: 650; }
+.generated-note { font-size: 10px; }
 .content-warning { color: #a44a27; }
 
 .play-pane { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--ocean); }
@@ -129,32 +129,35 @@ h1 { max-width: 12ch; margin: 0 0 26px; font-size: clamp(36px, 3.4vw, 58px); lin
 @media (max-width: 760px) {
   .game-shell { display: flex; flex-direction: column; height: 100dvh; min-height: 100dvh; overflow-y: auto; }
   .game-shell.has-result { height: auto; overflow: visible; }
-  .clue-pane { flex: none; padding: 14px 18px 12px; border-right: 0; border-bottom: 1px solid var(--rule); }
-  .brand-row { align-items: baseline; }
-  .wordmark { font-size: 21px; }
+  .clue-pane { flex: none; padding: 10px 16px 8px; border-right: 0; border-bottom: 1px solid var(--rule); }
+  .brand-row { position: relative; justify-content: center; min-height: 21px; }
+  .wordmark { font-size: 20px; }
+  .phase-tag { position: absolute; right: 0; }
+  .phase-prefix { display: none; }
   .phase-tag { font-size: 9px; }
-  .clue-content { display: block; padding: 12px 0 0; }
+  .clue-content { display: block; padding: 8px 0 0; }
   .eyebrow { margin: 0 0 4px; font-size: 9px; }
-  h1 { max-width: none; margin: 0 0 12px; font-size: clamp(26px, 6.7vw, 34px); line-height: 1.04; }
-  .photo-frame { aspect-ratio: 1.75; }
-  .photo-frame.photo-portrait { aspect-ratio: auto; height: min(37vh, 360px); }
+  h1 { max-width: none; margin: 0 0 8px; font-size: clamp(23px, 6vw, 30px); line-height: 1.04; }
+  .photo-frame { aspect-ratio: 2.3; }
+  .photo-frame.photo-portrait { aspect-ratio: auto; height: min(24dvh, 210px); }
   .has-result .photo-frame { aspect-ratio: 2.3; }
   .has-result .photo-frame.photo-portrait { aspect-ratio: auto; }
   .josh-overlay { width: clamp(46px, 14cqw, 68px); }
   .photo-clue figcaption { margin-top: 5px; font-size: 9px; line-height: 1.2; }
   .clue-note { display: none; }
-  .clue-footer { flex-direction: row; flex-wrap: wrap; gap: 4px 12px; margin-top: 7px; }
+  .clue-footer { flex-direction: row; flex-wrap: wrap; gap: 2px 12px; margin-top: 4px; }
   .clue-footer > span:first-child { display: none; }
-  .play-pane { flex: 1; min-height: 0; padding-bottom: 80px; }
+  .generated-note { flex-basis: 100%; }
+  .play-pane { flex: 1; min-height: 0; padding-bottom: 72px; }
   .has-result .play-pane { padding-bottom: 0; }
-  .play-header { min-height: 44px; padding: 0 18px; }
+  .play-header { min-height: 40px; padding: 0 16px; }
   .tutorial { padding: 9px 18px; }
   .map-canvas .maplibregl-ctrl-group button { width: 40px; height: 40px; }
   .step-title { font-size: 14px; }
   .interaction-hint { font-size: 10px; }
   .globe-stage { flex: 1; min-height: 180px; }
   .has-result .globe-stage { flex: none; height: clamp(290px, 40dvh, 420px); }
-  .action-bar { position: fixed; z-index: 5; inset-inline: 0; bottom: 0; min-height: 80px; padding: 12px 18px max(12px, env(safe-area-inset-bottom)); gap: 12px; }
+  .action-bar { position: fixed; z-index: 5; inset-inline: 0; bottom: 0; min-height: 72px; padding: 9px 16px max(9px, env(safe-area-inset-bottom)); gap: 12px; }
   .guess-readout strong { font-size: 12px; }
   .submit-button { min-width: 140px; min-height: 48px; padding: 0 12px; font-size: 13px; }
   .result-sheet { grid-template-columns: 1fr; gap: 12px; padding: 17px 20px max(20px, env(safe-area-inset-bottom)); }
@@ -170,10 +173,10 @@ h1 { max-width: 12ch; margin: 0 0 26px; font-size: clamp(36px, 3.4vw, 58px); lin
 }
 
 @media (max-width: 760px) and (max-height: 720px) {
-  .clue-content { padding-top: 8px; }
-  h1 { margin-bottom: 8px; font-size: 26px; }
-  .photo-frame { aspect-ratio: 2.35; }
-  .photo-frame.photo-portrait { aspect-ratio: auto; height: min(32vh, 240px); }
+  .clue-content { padding-top: 6px; }
+  h1 { margin-bottom: 6px; font-size: 23px; }
+  .photo-frame { aspect-ratio: 2.6; }
+  .photo-frame.photo-portrait { aspect-ratio: auto; height: min(21dvh, 170px); }
   .clue-footer { margin-top: 4px; }
 }
 

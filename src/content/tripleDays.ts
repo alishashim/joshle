@@ -1,7 +1,7 @@
 import type { TripleDay } from './types';
 
 // Complete days only. The local generator stages unfinished rounds outside this manifest.
-// The first three days reuse existing official WebP clues without changing the legacy run.
+// Day 1 uses a freshly generated three-image set; later legacy clues remain unchanged.
 export const tripleDays: TripleDay[] = [
   {
     "id": "joshle-triple-0001",
@@ -12,87 +12,85 @@ export const tripleDays: TripleDay[] = [
         "id": "joshle-triple-0001-easy",
         "number": 1,
         "date": "2026-09-23",
+        "difficulty": "easy",
+        "maxScore": 5000,
         "image": {
-          "src": "/images/puzzles/p_0011.webp",
-          "alt": "Josh pointing in a casual travel scene with architecture and landscape clues.",
+          "src": "/images/puzzles/t_0001_easy.webp",
+          "alt": "Josh points through a travel scene with architecture and landscape clues.",
           "author": "Joshle with Google Gemini",
           "license": "GENERATED",
           "attributionText": "AI-generated for Joshle with Google Gemini",
           "includesJosh": true
         },
         "answer": {
-          "lat": 40.71427,
-          "lng": -74.00597,
-          "label": "New York City, United States",
-          "countryCode": "US"
+          "lat": -23.5475,
+          "lng": -46.63611,
+          "label": "Sao Paulo, Brazil",
+          "countryCode": "BR"
         },
-        "fact": "New York City is in United States. The clue is a generated, representative scene rather than a photo of the exact coordinate.",
+        "fact": "Sao Paulo is in Brazil. The generated scene represents the area rather than the exact coordinate.",
         "generation": {
-          "geonameId": 5128581,
-          "coordinateSourceUrl": "https://www.geonames.org/5128581/",
+          "geonameId": 3448439,
+          "coordinateSourceUrl": "https://www.geonames.org/3448439/",
           "difficulty": "easy",
           "sizeTier": "very-large"
-        },
-        "difficulty": "easy",
-        "maxScore": 5000
+        }
       },
       {
         "id": "joshle-triple-0001-medium",
         "number": 1,
         "date": "2026-09-23",
+        "difficulty": "medium",
+        "maxScore": 5000,
         "image": {
-          "src": "/images/puzzles/p_0001.webp",
-          "alt": "Josh points along a narrow street lined with pale apartment buildings and balconies.",
-          "author": "Joshle",
+          "src": "/images/puzzles/t_0001_medium.webp",
+          "alt": "Josh points through a travel scene with architecture and landscape clues.",
+          "author": "Joshle with Google Gemini",
           "license": "GENERATED",
-          "attributionText": "AI-generated for Joshle",
-          "includesJosh": true,
-          "orientation": "portrait"
+          "attributionText": "AI-generated for Joshle with Google Gemini",
+          "includesJosh": true
         },
         "answer": {
-          "lat": 38.72509,
-          "lng": -9.1498,
-          "label": "Lisbon, Portugal",
-          "countryCode": "PT"
+          "lat": 42.24115,
+          "lng": -83.61299,
+          "label": "Ypsilanti, United States",
+          "countryCode": "US"
         },
-        "fact": "Lisbon is Portugal’s capital. This puzzle uses a representative city-center coordinate.",
+        "fact": "Ypsilanti is in United States. The generated scene represents the area rather than the exact coordinate.",
         "generation": {
-          "geonameId": 2267057,
-          "coordinateSourceUrl": "https://www.geonames.org/2267057/",
+          "geonameId": 5015688,
+          "coordinateSourceUrl": "https://www.geonames.org/5015688/",
           "difficulty": "medium",
           "sizeTier": "very-large"
-        },
-        "difficulty": "medium",
-        "maxScore": 5000
+        }
       },
       {
         "id": "joshle-triple-0001-hard",
         "number": 1,
         "date": "2026-09-23",
+        "difficulty": "hard",
+        "maxScore": 5000,
         "image": {
-          "src": "/images/puzzles/p_0003.webp",
-          "alt": "Josh points along a sloped residential street with balconies and hills beyond.",
-          "author": "Joshle",
+          "src": "/images/puzzles/t_0001_hard.webp",
+          "alt": "Josh points through a travel scene with architecture and landscape clues.",
+          "author": "Joshle with Google Gemini",
           "license": "GENERATED",
-          "attributionText": "AI-generated for Joshle",
-          "includesJosh": true,
-          "orientation": "portrait"
+          "attributionText": "AI-generated for Joshle with Google Gemini",
+          "includesJosh": true
         },
         "answer": {
-          "lat": 41.69143,
-          "lng": 44.83412,
-          "label": "Tbilisi, Georgia",
-          "countryCode": "GE"
+          "lat": 45.92972,
+          "lng": 3.1131,
+          "label": "Saint-Bonnet-pres-Riom, France",
+          "countryCode": "FR"
         },
-        "fact": "Tbilisi is Georgia’s capital. This puzzle uses a representative city-center coordinate.",
+        "fact": "Saint-Bonnet-pres-Riom is in France. The generated scene represents the area rather than the exact coordinate.",
         "generation": {
-          "geonameId": 611717,
-          "coordinateSourceUrl": "https://www.geonames.org/611717/",
+          "geonameId": 2981315,
+          "coordinateSourceUrl": "https://www.geonames.org/2981315/",
           "difficulty": "hard",
           "sizeTier": "enormous"
-        },
-        "difficulty": "hard",
-        "maxScore": 5000
+        }
       }
     ]
   },
