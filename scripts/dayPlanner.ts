@@ -75,11 +75,23 @@ export function planDay(days: readonly TripleDay[], catalog: readonly Location[]
 }
 
 export function assertReadyToPublish(day: TripleDay, validImages: readonly boolean[]): void {
+  const countries = new Set(day.rounds.map((round) => round.answer.countryCode));
+  const geonames = new Set(day.rounds.map((round) => round.generation?.geonameId));
   if (day.rounds.length !== 3 || validImages.length !== 3 || !validImages.every(Boolean)
+    || countries.size !== 3 || geonames.size !== 3
     || day.rounds.some((round, index) => round.difficulty !== DIFFICULTIES[index]
       || round.id !== `${day.id}-${DIFFICULTIES[index]}`
       || round.maxScore !== 5000
       || round.date !== day.date || round.number !== day.number
-      || !Number.isFinite(round.answer.lat) || !Number.isFinite(round.answer.lng)))
+      || !Number.isFinite(round.answer.lat) || Math.abs(round.answer.lat) > 90
+      || !Number.isFinite(round.answer.lng) || Math.abs(round.answer.lng) > 180
+      || !round.answer.label || !round.answer.countryCode || !round.fact
+      || round.image.src !== `/images/puzzles/t_${String(day.number).padStart(4, '0')}_${DIFFICULTIES[index]}.webp`
+      || !round.image.alt || round.image.license !== 'GENERATED'
+      || !round.image.includesJosh || !round.image.attributionText
+      || !Number.isSafeInteger(round.generation?.geonameId)
+      || !round.generation?.coordinateSourceUrl
+      || round.generation.difficulty !== DIFFICULTIES[index]
+      || round.generation.sizeTier !== (round.difficulty === 'hard' ? 'enormous' : 'very-large')))
     throw new Error('A complete day needs three ordered, valid rounds and images.');
 }

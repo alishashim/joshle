@@ -22,6 +22,10 @@ describe('triple-day planning', () => {
     const day = planDay([], locations);
     expect(() => assertReadyToPublish(day, [true, true, false])).toThrow();
     expect(() => assertReadyToPublish({ ...day, rounds: day.rounds.slice(0, 2) as typeof day.rounds }, [true, true])).toThrow();
+    expect(() => assertReadyToPublish({ ...day, rounds: [
+      { ...day.rounds[0], answer: { ...day.rounds[0].answer, lat: 100 } },
+      day.rounds[1], day.rounds[2],
+    ] }, [true, true, true])).toThrow();
     expect(() => assertReadyToPublish(day, [true, true, true])).not.toThrow();
   });
 });
