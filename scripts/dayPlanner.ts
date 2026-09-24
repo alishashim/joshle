@@ -85,7 +85,7 @@ export function assertReadyToPublish(day: TripleDay, validImages: readonly boole
       || round.date !== day.date || round.number !== day.number
       || !Number.isFinite(round.answer.lat) || Math.abs(round.answer.lat) > 90
       || !Number.isFinite(round.answer.lng) || Math.abs(round.answer.lng) > 180
-      || !round.answer.label || !round.answer.countryCode || !round.fact
+      || !round.answer.label || !round.answer.countryCode || !round.fact || !round.factSourceUrl
       || round.image.src !== `/images/puzzles/t_${String(day.number).padStart(4, '0')}_${DIFFICULTIES[index]}.webp`
       || !round.image.alt || round.image.license !== 'GENERATED'
       || !round.image.includesJosh || !round.image.attributionText

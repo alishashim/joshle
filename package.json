@@ -10,6 +10,9 @@
     "validate-content": "node scripts/validate-content.mjs && node scripts/validate-triple-content.mjs",
     "generate-puzzles": "node --import tsx scripts/generate-puzzles.ts",
     "generate-days": "node --import tsx scripts/generate-days.ts",
+    "generate-round-image": "node --import tsx scripts/generate-round-image.ts",
+    "retrofit-facts": "node --import tsx scripts/retrofit-city-facts.ts",
+    "audit-fact-sources": "node --import tsx scripts/audit-fact-sources.ts",
     "build": "npm run validate-content && tsc --noEmit && vite build",
     "preview": "vite preview"
   },

@@ -42,7 +42,7 @@ Before public launch, review the dated clues for visual quality and geographic a
 
 Legacy puzzles live in `src/content/puzzles.ts`. Each record has a permanent `id` and `number`, a date in the `America/New_York` game timezone, an answer, a fact, and local image metadata. The first ten daily clues are manually generated images for September 23–October 2, 2026; puzzle #11 follows on October 3. Their city-named source JPEGs are retained, while the game serves smaller, opaque-named WebP copies. The earlier illustrated test assets remain in the folder but are not daily puzzles.
 
-The three-round dataset lives in `src/content/tripleDays.ts`. Each complete day contains Easy, Medium, and Hard rounds worth 5,000 points each. Day 1 uses three newly generated clues. Days 2–3 reuse six existing WebP clues without altering the legacy records; day 4 has three newly generated images. The two modes have separate save keys (`joshle.game.official` and `joshle.game.triple.v2`) and can have different content on the same date. The triple key was changed when Day 1 was reset so earlier test completions do not hide its new rounds. Local mode checks:
+The three-round dataset lives in `src/content/tripleDays.ts`. Each complete day contains Easy, Medium, and Hard rounds worth 5,000 points each. September 23 and 24 keep their published clue images and answers. September 25 uses a new Rome landmark image for Easy, an existing Lisbon clue for Medium, and an existing Antananarivo clue for Hard. New days are authored through October 31, 2026. Each round has a short answer-location fact with a source link, shown after submission. The two modes have separate save keys (`joshle.game.official` and `joshle.game.triple.v2`) and can have different content on the same date. Local mode checks:
 
 ```sh
 VITE_JOSHLE_DATASET=legacy npm run dev
@@ -56,12 +56,15 @@ VITE_JOSHLE_DATASET=triple npm run build
 
 The generator reads `GEMINI_API_KEY` from the shell or ignored `.env.local`. The key and Google SDK are used only by the local Node script; the static site makes no Gemini calls. [Gemini 3.1 Flash Image has no free API tier](https://ai.google.dev/gemini-api/docs/pricing), so generating assets requires a key linked to a billed project. The live site's runtime cost remains independent of Gemini.
 
-For the three-round dataset, `--count 1` generates exactly one complete day (three image requests), while `--count 5` generates five days. Dry-run plans dates and locations without API calls. The maximum batch is 30 days. An incomplete day stays in ignored `scripts/.generated-days/` and resumes on the next run; it enters `tripleDays.ts` only after all three WebPs are valid. `--force` regenerates staged images for an unpublished day. Review every generated day before deploying.
+For the three-round dataset, `--count 1` generates exactly one complete day (three image requests). `--through YYYY-MM-DD` generates up to and including that date and can be rerun safely after an interruption. Dry-run plans dates and locations without API calls. The maximum batch is 30 days. An incomplete day stays in ignored `scripts/.generated-days/` and resumes on the next run; it enters `tripleDays.ts` only after all three WebPs and three sourced facts are present. `--force` regenerates staged images for an unpublished day. The local generator uses Gemini text search to draft city facts and commits the resulting text and direct source URLs as static content. Check each generated image and fact before deploying.
 
 ```sh
 npm run generate-days -- --count 1 --dry-run
 npm run generate-days -- --count 1
 npm run generate-days -- --count 5
+npm run generate-days -- --through 2026-10-31
+npm run retrofit-facts
+npm run audit-fact-sources
 ```
 
 The original single-puzzle generator remains available for the legacy dataset:

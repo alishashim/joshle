@@ -1,6 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import type { Coordinates } from './gameState';
-import type { Puzzle } from '../content/types';
 import { PhotoClue } from '../components/PhotoClue';
 import { ResultSheet } from '../components/ResultSheet';
 import { ACTIVE_DATASET, selectDay } from '../content/dataset';
@@ -55,7 +54,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
 }) {
   const shellRef = useRef<HTMLElement>(null);
   const [roundIndex, setRoundIndex] = useState(() => nextRoundIndex(day, save));
-  const puzzle: Puzzle = day.rounds[roundIndex];
+  const puzzle = day.rounds[roundIndex];
   const completion = save.completed[puzzle.id] ?? null;
   const [guess, setGuess] = useState<Coordinates | null>(completion?.guess ?? null);
   const [shareStatus, setShareStatus] = useState('');
@@ -121,7 +120,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
       <section className="clue-pane" aria-labelledby="game-title">
         <header className="brand-row">
           <span className="wordmark">joshle</span>
-          <span className="phase-tag"><span className="phase-prefix">PHOTO JOSH / </span>#{day.number}{day.mode === 'triple' ? ` · ${roundIndex + 1}/3` : ''}</span>
+          <span className="phase-tag"><span className="phase-prefix">PHOTO JOSH / </span>#{day.number}{day.mode === 'triple' ? ` · ${roundIndex + 1}/3 · ${puzzle.difficulty?.toUpperCase()}` : ''}</span>
         </header>
 
         <div className="clue-content">

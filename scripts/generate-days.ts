@@ -5,28 +5,33 @@ import { GoogleGenAI } from '@google/genai';
 import { config as loadEnv } from 'dotenv';
 import sharp from 'sharp';
 import ts from 'typescript';
-import type { Difficulty, TripleDay } from '../src/content/types';
+import type { TripleDay } from '../src/content/types';
 import { assertReadyToPublish, planDay } from './dayPlanner';
 import type { Location } from './dayPlanner';
+import { generateCityFacts } from './cityFacts';
+import { generateSceneImage, statusOf } from './generateScene';
 import catalog from './location-catalog.json';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const manifestPath = resolve(root, 'src/content/tripleDays.ts');
 const stageRoot = resolve(root, 'scripts/.generated-days');
 const lockPath = resolve(root, 'scripts/.generate-days.lock');
-const model = 'gemini-3.1-flash-image';
 const locations = catalog as Location[];
 
 function options(args: string[]) {
-  let count = 0, dryRun = false, force = false;
+  let count: number | undefined, through: string | undefined, dryRun = false, force = false;
   for (let index = 0; index < args.length; index++) {
     if (args[index] === '--count') count = Number(args[++index]);
+    else if (args[index] === '--through') through = args[++index];
     else if (args[index] === '--dry-run') dryRun = true;
     else if (args[index] === '--force') force = true;
     else throw new Error(`Unknown option: ${args[index]}`);
   }
-  if (!Number.isSafeInteger(count) || count < 1 || count > 30) throw new Error('--count must be an integer from 1 to 30.');
-  return { count, dryRun, force };
+  if ((count === undefined) === (through === undefined)) throw new Error('Use either --count or --through.');
+  if (count !== undefined && (!Number.isSafeInteger(count) || count < 1 || count > 30)) throw new Error('--count must be an integer from 1 to 30.');
+  if (through !== undefined && (!/^\d{4}-\d{2}-\d{2}$/.test(through) || Number.isNaN(Date.parse(`${through}T12:00:00Z`))))
+    throw new Error('--through must be a valid YYYY-MM-DD date.');
+  return { count, through, dryRun, force };
 }
 
 async function exists(path: string) {
@@ -48,54 +53,6 @@ async function readDays(): Promise<TripleDay[]> {
   if (transpiled.diagnostics?.length) throw new Error('Triple-day manifest has a syntax error.');
   const module = await import(`data:text/javascript;base64,${Buffer.from(transpiled.outputText).toString('base64')}`);
   return module.tripleDays as TripleDay[];
-}
-
-function prompt(place: Location, difficulty: Difficulty): string {
-  const scene = difficulty === 'easy'
-    ? 'Include a recognizable landmark, skyline, monument, natural feature, or strong city clue. Make the place approachable for an ordinary player.'
-    : difficulty === 'medium'
-      ? 'Use recognizable regional clues from architecture, transit, vegetation, terrain, and infrastructure without an obvious answer giveaway.'
-      : 'Use a less-famous neighborhood, smaller-city setting, or peripheral landscape. Make it difficult but fair with several real geographic signals.';
-  const size = difficulty === 'easy' ? 'about 2 times' : difficulty === 'medium' ? 'about 2.5 times' : 'at least 3 times';
-  const frameHeight = difficulty === 'easy' ? 'roughly 35%' : difficulty === 'medium' ? 'roughly 50%' : 'roughly 65%';
-  return `Generate one realistic 3:2 casual smartphone travel photograph for a geography guessing game. Location: ${place.place}, ${place.country} (${place.continent}). Scene direction: ${place.scene}. ${scene} Include useful clues from architecture, terrain, vegetation, climate, roads, vehicles, infrastructure, and everyday local culture where appropriate. Avoid readable place names, flags, maps, airport signs, tourism signs, watermarks, and legible text that reveals the answer. Natural imperfect daylight snapshot; no illustration, studio lighting, surreal details, or glossy advertising look.
-
-The first attached image (josh.jpg) is ONLY a pose and composition reference. The second (josh-cutout.jpg) is the identity and appearance reference for the same adult Josh. Preserve his recognizable face, hair, and pointing pose. Composite him with convincing perspective and shadows. Make Josh ${size} heavier and larger-bodied than in the references and occupy ${frameHeight} of the frame height, presented neutrally and respectfully. Keep at least three place clues visible around him. Never reproduce the White House or any background from the pose reference. Output one finished photograph with Josh already in it.`;
-}
-
-function statusOf(error: unknown): number | undefined {
-  if (!error || typeof error !== 'object') return undefined;
-  const value = 'status' in error ? error.status : 'code' in error ? error.code : undefined;
-  const number = Number(value);
-  return Number.isInteger(number) ? number : undefined;
-}
-
-async function generateImage(ai: GoogleGenAI, place: Location, references: [string, string]): Promise<Buffer> {
-  const input = [
-    { type: 'image' as const, mime_type: 'image/jpeg', data: references[0] },
-    { type: 'image' as const, mime_type: 'image/jpeg', data: references[1] },
-    { type: 'text' as const, text: prompt(place, place.difficulty) },
-  ];
-  for (let attempt = 1; attempt <= 4; attempt++) {
-    try {
-      const response = await ai.interactions.create({
-        model, input, response_format: { type: 'image', aspect_ratio: '3:2', image_size: '1K' },
-      });
-      if (!response.output_image?.data) throw new Error('No image returned');
-      return await sharp(Buffer.from(response.output_image.data, 'base64'))
-        .resize(1536, 1024, { fit: 'cover', withoutEnlargement: true })
-        .webp({ quality: 82, effort: 4 }).toBuffer();
-    } catch (error) {
-      const status = statusOf(error);
-      const transient = status === 429 || (status !== undefined && status >= 500)
-        || (error instanceof Error && /timeout|network|ECONNRESET|fetch failed/i.test(error.message));
-      if (!transient || attempt === 4) throw error;
-      const waitMs = 1000 * 4 ** (attempt - 1);
-      console.log(`  Transient API error (${status ?? 'network'}); retrying in ${waitMs / 1000}s.`);
-      await new Promise((done) => setTimeout(done, waitMs));
-    }
-  }
-  throw new Error('Image generation failed.');
 }
 
 async function publishDay(day: TripleDay, stageDir: string) {
@@ -124,9 +81,15 @@ async function publishDay(day: TripleDay, stageDir: string) {
 }
 
 async function main() {
-  const { count, dryRun, force } = options(process.argv.slice(2));
+  const { count: requestedCount, through, dryRun, force } = options(process.argv.slice(2));
   if (new Set(locations.map((place) => place.geonameId)).size !== locations.length) throw new Error('Location catalog has duplicate GeoNames IDs.');
   const days = await readDays();
+  const latest = days.map((day) => day.date).sort().at(-1) ?? '2026-09-22';
+  const count = through
+    ? Math.max(0, Math.round((Date.parse(`${through}T12:00:00Z`) - Date.parse(`${latest}T12:00:00Z`)) / 86_400_000))
+    : requestedCount!;
+  if (count > 30) throw new Error('--through needs more than 30 days; use smaller batches.');
+  if (count === 0) { console.log(`Already authored through ${through}.`); return; }
   if (dryRun) {
     for (let index = 0; index < count; index++) {
       const day = planDay(days, locations);
@@ -154,20 +117,35 @@ async function main() {
     if (!(await exists(draftPath))) await atomicWrite(draftPath, `${JSON.stringify(day, null, 2)}\n`);
     console.log(`[${index + 1}/${count}] ${day.id} ${day.date}`);
     try {
-      for (const round of day.rounds) {
+      const imageResults = await Promise.allSettled(day.rounds.map(async (round) => {
         const staged = resolve(stageDir, `${round.difficulty}.webp`);
         const final = resolve(root, 'public', `.${round.image.src}`);
         if (!force && (await exists(staged) || await exists(final))) {
           console.log(`  Reusing ${round.difficulty} image.`);
           skipped++;
-          continue;
+          return;
         }
         const place = locations.find((item) => item.geonameId === round.generation?.geonameId);
         if (!place || place.difficulty !== round.difficulty) throw new Error(`Invalid ${round.difficulty} draft location.`);
         console.log(`  Generating ${round.difficulty}: ${round.answer.label}`);
-        const image = await generateImage(ai, place, references);
+        const image = await generateSceneImage(ai, place, references);
         await atomicWrite(staged, image);
         console.log(`  Saved ${round.difficulty} (${Math.round(image.length / 1024)} KiB).`);
+      }));
+      const imageFailure = imageResults.find((result) => result.status === 'rejected');
+      if (imageFailure?.status === 'rejected') throw imageFailure.reason;
+      const missingFacts = day.rounds.filter((round) => !round.factSourceUrl);
+      if (missingFacts.length) {
+        console.log(`  Researching ${missingFacts.length} city facts.`);
+        const facts = await generateCityFacts(ai, missingFacts.map((round) => ({
+          id: round.id, label: round.answer.label, lat: round.answer.lat, lng: round.answer.lng,
+        })));
+        for (const fact of facts) {
+          const round = day.rounds.find((entry) => entry.id === fact.id)!;
+          round.fact = fact.fact;
+          round.factSourceUrl = fact.sourceUrl;
+        }
+        await atomicWrite(draftPath, `${JSON.stringify(day, null, 2)}\n`);
       }
       await publishDay(day, stageDir);
       days.push(day);

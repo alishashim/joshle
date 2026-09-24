@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import catalog from './location-catalog.json';
 import { tripleDays } from '../src/content/tripleDays';
-import { assertReadyToPublish, nextDayIdentity, planDay } from './dayPlanner';
+import { assertReadyToPublish, nextDate, nextDayIdentity, planDay } from './dayPlanner';
 import type { Location } from './dayPlanner';
 
 const locations = catalog as Location[];
@@ -15,7 +15,10 @@ describe('triple-day planning', () => {
     expect(day.rounds).toHaveLength(3);
     expect(new Set(day.rounds.map((round) => round.answer.countryCode)).size).toBe(3);
     expect(nextDayIdentity([day])).toEqual({ number: 2, date: '2026-09-24' });
-    expect(nextDayIdentity(tripleDays)).toEqual({ number: 5, date: '2026-09-27' });
+    expect(nextDayIdentity(tripleDays)).toEqual({
+      number: tripleDays.length + 1,
+      date: nextDate(tripleDays.at(-1)!.date),
+    });
   });
 
   it('requires all three valid images before a day can enter the manifest', () => {
@@ -26,6 +29,7 @@ describe('triple-day planning', () => {
       { ...day.rounds[0], answer: { ...day.rounds[0].answer, lat: 100 } },
       day.rounds[1], day.rounds[2],
     ] }, [true, true, true])).toThrow();
-    expect(() => assertReadyToPublish(day, [true, true, true])).not.toThrow();
+    const sourcedDay = { ...day, rounds: day.rounds.map((round) => ({ ...round, factSourceUrl: 'https://example.com/fact' })) as typeof day.rounds };
+    expect(() => assertReadyToPublish(sourcedDay, [true, true, true])).not.toThrow();
   });
 });

@@ -34,6 +34,7 @@ export function ResultSheet({ puzzle, distance, score, streak, onShare, shareSta
         <p className="result-kicker">{Math.round(distance).toLocaleString()} km from the answer</p>
         <h2 id="result-title">{puzzle.answer.label}</h2>
         <p className="result-fact">{puzzle.fact}</p>
+        {puzzle.factSourceUrl && <p className="photo-credit"><a href={puzzle.factSourceUrl} target="_blank" rel="noreferrer">Source for this fact</a></p>}
         <p className="photo-credit">
           Image: {puzzle.image.sourceUrl ? <a href={puzzle.image.sourceUrl} target="_blank" rel="noreferrer">{attribution}</a> : attribution}
           {puzzle.image.licenseUrl ? <> · <a href={puzzle.image.licenseUrl} target="_blank" rel="noreferrer">{licenses[puzzle.image.license]}</a></> : ` · ${licenses[puzzle.image.license]}`}

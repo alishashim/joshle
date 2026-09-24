@@ -36,6 +36,10 @@ else for (const day of tripleDays) {
     if (round?.date !== day.date || round?.number !== day.number) errors.push(`${name}: date/number mismatch`);
     if (!Number.isFinite(round?.answer?.lat) || Math.abs(round.answer.lat) > 90 || !Number.isFinite(round?.answer?.lng) || Math.abs(round.answer.lng) > 180) errors.push(`${name}: invalid coordinates`);
     if (!round?.answer?.label || !round.answer.countryCode || !round.fact) errors.push(`${name}: missing answer metadata`);
+    if (typeof round?.factSourceUrl !== 'string' || !/^https:\/\/[^\s]+$/i.test(round.factSourceUrl)
+      || round.factSourceUrl.includes('vertexaisearch.cloud.google.com')
+      || /generated scene|representative city-center/i.test(round.fact))
+      errors.push(`${name}: missing sourced city fact`);
     const image = round?.image;
     if (typeof image?.src !== 'string' || !image.src.startsWith('/') || image.src.startsWith('//')) errors.push(`${name}: invalid local image path`);
     else {
@@ -45,6 +49,15 @@ else for (const day of tripleDays) {
     if (!image?.alt || image.license !== 'GENERATED' || !image.includesJosh || !image.attributionText) errors.push(`${name}: missing generated image metadata`);
     if (!Number.isSafeInteger(round?.generation?.geonameId) || geonames.has(round.generation.geonameId) || !round.generation.coordinateSourceUrl) errors.push(`${name}: invalid or duplicate GeoNames metadata`);
     geonames.add(round?.generation?.geonameId);
+  }
+}
+
+if (Array.isArray(tripleDays)) {
+  const orderedDates = tripleDays.map((day) => day.date).sort();
+  for (let index = 1; index < orderedDates.length; index++) {
+    const expected = new Date(`${orderedDates[index - 1]}T12:00:00Z`);
+    expected.setUTCDate(expected.getUTCDate() + 1);
+    if (orderedDates[index] !== expected.toISOString().slice(0, 10)) errors.push(`Missing daily puzzle between ${orderedDates[index - 1]} and ${orderedDates[index]}`);
   }
 }
 

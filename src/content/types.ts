@@ -21,6 +21,7 @@ export type Puzzle = {
     countryCode: string;
   };
   fact: string;
+  factSourceUrl?: string;
   joshPlacement?: {
     xPct: number;
     yPct: number;
