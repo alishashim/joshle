@@ -213,12 +213,6 @@ export function Globe({ guess, answer, locked, onGuess }: GlobeProps) {
     };
   }, [answer, guess, status]);
 
-  const pinCenter = () => {
-    if (locked || status !== 'ready' || !mapRef.current) return;
-    const center = mapRef.current.getCenter();
-    onGuess({ lat: center.lat, lng: center.lng });
-  };
-
   return (
     <div className="globe-stage">
       <div
@@ -226,13 +220,14 @@ export function Globe({ guess, answer, locked, onGuess }: GlobeProps) {
         className="map-canvas"
         aria-label={locked
           ? 'Globe showing your guess, the answer, and the route between them.'
-          : 'Interactive globe. Drag to turn, zoom with wheel or pinch, click or tap to place your guess.'}
+          : 'Interactive globe. Drag to turn, zoom with wheel or pinch, click or tap to guess. Press Enter or Space to pin the map center.'}
+        onKeyDown={(event) => {
+          if (locked || status !== 'ready' || !mapRef.current || (event.key !== 'Enter' && event.key !== ' ')) return;
+          event.preventDefault();
+          const center = mapRef.current.getCenter();
+          onGuess({ lat: center.lat, lng: center.lng });
+        }}
       />
-      {status === 'ready' && !locked && (
-        <button className="pin-center-button" type="button" onClick={pinCenter}>
-          Pin map center
-        </button>
-      )}
       {status === 'loading' && (
         <div className="map-message" role="status">
           <span className="loading-orbit" aria-hidden="true" />

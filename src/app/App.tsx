@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import type { Coordinates } from './gameState';
 import type { Puzzle } from '../content/types';
 import { PhotoClue } from '../components/PhotoClue';
@@ -53,6 +53,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
   save: GameSave;
   updateSave: (next: GameSave) => void;
 }) {
+  const shellRef = useRef<HTMLElement>(null);
   const [roundIndex, setRoundIndex] = useState(() => nextRoundIndex(day, save));
   const puzzle: Puzzle = day.rounds[roundIndex];
   const completion = save.completed[puzzle.id] ?? null;
@@ -62,6 +63,13 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
   const streak = activeStreak(save, today);
   const scores = day.mode === 'triple' ? dailyScores(day, save) : null;
   const finalRound = roundIndex === day.rounds.length - 1;
+  const nextRound = day.mode === 'triple' && !finalRound ? () => {
+    shellRef.current?.scrollTo(0, 0);
+    window.scrollTo(0, 0);
+    setRoundIndex(roundIndex + 1);
+    setGuess(null);
+    setCopyStatus('');
+  } : undefined;
 
   const submitGuess = () => {
     if (!guess || completion) return;
@@ -99,7 +107,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
   };
 
   return (
-    <main className={`game-shell${completion ? ' has-result' : ''}`}>
+    <main ref={shellRef} className={`game-shell${completion ? ' has-result' : ''}${completion && nextRound ? ' has-next-round' : ''}`}>
       <section className="clue-pane" aria-labelledby="game-title">
         <header className="brand-row">
           <span className="wordmark">joshle</span>
@@ -144,11 +152,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
           <ResultSheet puzzle={puzzle} distance={completion.distanceKm} score={completion.score}
             streak={streak} onCopy={copyResult} copyStatus={copyStatus}
             dailyScores={finalRound ? scores : null}
-            nextRound={day.mode === 'triple' && !finalRound ? () => {
-              setRoundIndex(roundIndex + 1);
-              setGuess(null);
-              setCopyStatus('');
-            } : undefined}
+            nextRound={nextRound}
             nextLabel={!finalRound ? `Continue to round ${roundIndex + 2}` : undefined} />
         ) : (
           <div className="action-bar">
@@ -165,6 +169,9 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
             </button>
           </div>
         )}
+        {completion && nextRound && <button className="mobile-next-round" type="button" onClick={nextRound}>
+          Continue to round {roundIndex + 2} <span aria-hidden="true">→</span>
+        </button>}
       </section>
     </main>
   );
