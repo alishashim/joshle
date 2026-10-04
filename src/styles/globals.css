@@ -119,6 +119,16 @@ h1 { max-width: 12ch; margin: 0 0 26px; font-size: clamp(36px, 3.4vw, 58px); lin
 .daily-breakdown { margin: 10px 0 0; font-size: 12px; font-weight: 650; line-height: 1.4; }
 .content-unavailable { max-width: 38rem; margin: 15vh auto; padding: 24px; }
 .content-unavailable h1 { max-width: none; font-size: 32px; }
+.out-of-days-dialog { width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: clamp(28px, 5vw, 48px); overflow: auto; border: 1px solid var(--ink); border-radius: 3px; color: var(--ink); background: var(--paper); box-shadow: 0 20px 70px rgba(20, 31, 25, .25); }
+.out-of-days-dialog::backdrop { background: rgba(24, 36, 30, .72); }
+.out-of-days-close { position: absolute; top: 12px; right: 14px; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; color: var(--ink); background: transparent; font-size: 28px; cursor: pointer; }
+.out-of-days-kicker { color: var(--accent); font-size: 11px; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; }
+.out-of-days-dialog h2 { max-width: 10ch; margin: 15px 0 22px; font-size: clamp(38px, 7vw, 58px); line-height: 1.02; letter-spacing: -.06em; }
+.out-of-days-dialog p { margin: 0 0 30px; font-size: 17px; line-height: 1.48; }
+.out-of-days-venmo { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; padding: 12px 17px; border-radius: 3px; color: #fff; background: var(--accent); font-size: 17px; font-weight: 750; text-decoration: none; }
+.out-of-days-venmo:hover { filter: brightness(.93); }
+.out-of-days-play { display: block; min-height: 44px; margin: 16px auto 0; padding: 6px 8px; border: 0; border-bottom: 1px solid currentColor; color: var(--ink); background: transparent; font-size: 13px; font-weight: 650; cursor: pointer; }
+.out-of-days-dialog button:focus-visible, .out-of-days-dialog a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .share-row { display: flex; align-items: center; gap: 12px; margin-top: 13px; color: var(--muted); font-size: 11px; }
 .share-button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--ink); border-radius: 3px; color: var(--ink); background: transparent; font-size: 12px; font-weight: 700; cursor: pointer; }
 .share-button:hover { background: #e7e4da; }

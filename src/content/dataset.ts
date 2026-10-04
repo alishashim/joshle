@@ -22,12 +22,16 @@ export const ACTIVE_DATASET = resolveDataset(import.meta.env.VITE_JOSHLE_DATASET
 
 export function selectDay(date: string, mode: Dataset,
   legacy: readonly Puzzle[] = puzzles, triple: readonly TripleDay[] = tripleDays,
-): { day: DailyContent | null; missingToday: boolean } {
+): { day: DailyContent | null; missingToday: boolean; outOfDays: boolean } {
   if (mode === 'legacy') {
     const { puzzle, missingToday } = selectDailyPuzzle(date, legacy);
-    return { day: { id: puzzle.id, number: puzzle.number, date: puzzle.date, rounds: [puzzle], mode }, missingToday };
+    return {
+      day: { id: puzzle.id, number: puzzle.number, date: puzzle.date, rounds: [puzzle], mode },
+      missingToday,
+      outOfDays: legacy.every((entry) => entry.date < date),
+    };
   }
-  if (!triple.length) return { day: null, missingToday: true };
+  if (!triple.length) return { day: null, missingToday: true, outOfDays: true };
   const { puzzle, missingToday } = selectDailyPuzzle(date, triple);
-  return { day: { ...puzzle, mode }, missingToday };
+  return { day: { ...puzzle, mode }, missingToday, outOfDays: triple.every((entry) => entry.date < date) };
 }

@@ -24,4 +24,12 @@ describe('content dataset switch', () => {
     expect(triple.day?.id).not.toBe(legacy.day?.id);
     expect(selectDay('2026-10-02', 'legacy', puzzles, [tripleDay]).day?.number).toBe(10);
   });
+
+  it('only reports exhausted days after the final authored date', () => {
+    expect(selectDay('2026-09-23', 'triple', puzzles, [tripleDay]).outOfDays).toBe(false);
+    expect(selectDay('2026-09-24', 'triple', puzzles, [tripleDay]).outOfDays).toBe(true);
+    expect(selectDay('2026-09-22', 'triple', puzzles, [tripleDay]).outOfDays).toBe(false);
+    expect(selectDay('2026-09-24', 'triple', puzzles, [tripleDay, { ...tripleDay, date: '2026-09-25' }]).outOfDays).toBe(false);
+    expect(selectDay('2026-10-04', 'legacy', puzzles, [tripleDay]).outOfDays).toBe(true);
+  });
 });

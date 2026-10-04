@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import type { Coordinates } from './gameState';
 import { PhotoClue } from '../components/PhotoClue';
 import { ResultSheet } from '../components/ResultSheet';
+import { OutOfDaysDialog } from '../components/OutOfDaysDialog';
 import { ACTIVE_DATASET, selectDay } from '../content/dataset';
 import type { DailyContent } from '../content/dataset';
 import { gameDate } from '../game/dailyPuzzle';
@@ -22,7 +23,7 @@ export function App() {
   const [today, setToday] = useState(() => gameDate());
   const storageKey = ACTIVE_DATASET === 'triple' ? TRIPLE_STORAGE_KEY : undefined;
   const [save, setSave] = useState(() => readSave(storageKey));
-  const { day, missingToday } = selectDay(today, ACTIVE_DATASET);
+  const { day, missingToday, outOfDays } = selectDay(today, ACTIVE_DATASET);
 
   useEffect(() => {
     const timer = window.setInterval(() => setToday(gameDate()), 30_000);
@@ -39,16 +40,18 @@ export function App() {
       day={day}
       today={today}
       missingToday={missingToday}
+      outOfDays={outOfDays}
       save={save}
       updateSave={updateSave}
     />
   );
 }
 
-function DailyGame({ day, today, missingToday, save, updateSave }: {
+function DailyGame({ day, today, missingToday, outOfDays, save, updateSave }: {
   day: DailyContent;
   today: string;
   missingToday: boolean;
+  outOfDays: boolean;
   save: GameSave;
   updateSave: (next: GameSave) => void;
 }) {
@@ -117,6 +120,7 @@ function DailyGame({ day, today, missingToday, save, updateSave }: {
 
   return (
     <main ref={shellRef} className={`game-shell${completion ? ' has-result' : ''}${completion && nextRound ? ' has-next-round' : ''}`}>
+      {outOfDays && <OutOfDaysDialog key={today} />}
       <section className="clue-pane" aria-labelledby="game-title">
         <header className="brand-row">
           <span className="wordmark">joshle</span>
